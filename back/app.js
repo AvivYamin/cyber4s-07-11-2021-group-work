@@ -2,12 +2,18 @@ const express  = require('express');
 const cors = require('cors');
 const path = require('path');
 const { response } = require('express');
+const morgan = require('morgan');
 const app = express();
 app.use(express.json());
 app.use(cors({
     origin: '*',
     methods: '*'
 }));
+//3.7
+// app.use(morgan('tiny'));
+morgan.token('body', (req, res) => JSON.stringify(req.body));
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
+
 const port = process.env.PORT || 3000;
 
 //Routers
@@ -119,18 +125,34 @@ app.delete('/api/persons/:id', (req, res) => {
 
 //3.5 + 3.6
 function validateRequest(request){
+    console.log(00000000);
     if(typeof request != 'object'){
         return 1;
     }
+
     if(!request.hasOwnProperty("name")){
+        console.log(22222222222);
         return 2;
-    }else if(findNameInPhonebook(request.name, phoneBook)){
-        return 3;
+    }else{
+        if(request.name === ""){
+            console.log(33333333);
+            return 3;
+        }
+        if(findNameInPhonebook(request.name, phoneBook)){
+            return 4;
+        }
     }
+
     if(!request.hasOwnProperty("number")){
-        return 4;
-    }else if(findNumberInPhonebook(request.number, phoneBook)){
         return 5;
+    }else{
+        let number = request.number.split('-').join('');
+        if(!Number(number)){
+            return 6;
+        }
+        if(findNumberInPhonebook(request.number, phoneBook)){
+            return 7;
+        } 
     }
 }
 
@@ -156,6 +178,7 @@ function findNumberInPhonebook(number, phoneBook){
 
 app.post('/api/persons', (req, res) => {
     try {
+        console.log(req.body);
         let validation = validateRequest(req.body);
          switch (validation) {
              case 1: 
@@ -165,18 +188,25 @@ app.post('/api/persons', (req, res) => {
                  validation = "There is no name!";
                  break;
              case 3:
+                validation = "Invalid Name!";
+                break;    
+             case 4:
                  validation = "The name is taken!";
                  break;
-             case 4:
+             case 5:
                  validation = "There is no number!";
                  break;
-             case 5:
+             case 6:
+                 validation = "Invalid Number!";
+                 break;
+             case 7:
                  validation = "Number is taken!";
                  break;
              default: 
                  validation = true;
                  break;
         }
+        console.log(validation);
         if(validation === true){
              let newPersonObject = {
               id: Math.floor(Math.random() * 101),
@@ -185,14 +215,23 @@ app.post('/api/persons', (req, res) => {
             };
             phoneBook.push(newPersonObject);
             console.log(phoneBook);
-            res.send("Success!!")
+            res.send(newPersonObject);
+        }else{
+            res.send(validation);
         }
-         res.send(`${validation}`);
     } catch (error) {
         console.log(error);
         res.send(error);
     }
 })
+
+//Front 
+app.use("/", express.static(path.resolve(`./dist`)));
+
+app.get("/", (req, res) => {
+ console.log("hey");
+  res.sendFile(path.resolve("./dist/index.html"));
+});
  
 app.listen(port, (error) => {
     if(error) {
