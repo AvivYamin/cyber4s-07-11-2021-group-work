@@ -125,17 +125,14 @@ app.delete('/api/persons/:id', (req, res) => {
 
 //3.5 + 3.6
 function validateRequest(request){
-    console.log(00000000);
     if(typeof request != 'object'){
         return 1;
     }
 
     if(!request.hasOwnProperty("name")){
-        console.log(22222222222);
         return 2;
     }else{
         if(request.name === ""){
-            console.log(33333333);
             return 3;
         }
         if(findNameInPhonebook(request.name, phoneBook)){
@@ -214,7 +211,7 @@ app.post('/api/persons', (req, res) => {
               number: req.body.number
             };
             phoneBook.push(newPersonObject);
-            console.log(phoneBook);
+            console.log(newPersonObject);
             res.send(newPersonObject);
         }else{
             res.send(validation);

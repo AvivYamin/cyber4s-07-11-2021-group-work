@@ -8,7 +8,11 @@
 </head>
 <body>
     <main id="main-container">
+      <header>
         <h1 id="main-head">PhoneBook</h1>
+        <button id="my-phonebook-button">My Phonebook</button>
+        <div id="phonebook"></div>
+      </header>
         <section id="form-container">
             <form>
               <fieldset>
@@ -30,6 +34,21 @@
                 >
               </input>
               <button id="submit-btn" type="submit">Submit Contact</button>
+              </fieldset>
+            </form>
+          </section>
+          <section id="search-container">
+            <form>
+              <fieldset>
+                <legend>Search Contact</legend>
+                <input
+                  id="contact-search-input"
+                  type="text"
+                  placeholder="Enter Name/ID/Phone Number..."
+                  required
+                >
+              </input>
+              <button id="search-btn">Search Contact</button>
               </fieldset>
             </form>
           </section>
