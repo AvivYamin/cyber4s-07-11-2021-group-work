@@ -1,7 +1,7 @@
 {
-  "name": "cyber4s-07-11-2021-group-work",
-  "version": "1.0.0",
-  "description": "",
+  "name": "backend",
+  "version": "0.0.1",
+  "description": "we will be working on this assigment https://fullstackopen.com/en/part3.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -14,8 +14,8 @@
     "url": "git+https://github.com/ArnonAsquira/cyber4s-07-11-2021-group-work.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "Aviv Yamin",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/ArnonAsquira/cyber4s-07-11-2021-group-work/issues"
   },
