@@ -9,12 +9,17 @@ app.use(cors({
     origin: '*',
     methods: '*'
 }));
+
+
+const port = process.env.PORT || 3000;
+
+
 //3.7
 // app.use(morgan('tiny'));
 morgan.token('body', (req, res) => JSON.stringify(req.body));
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
 
-const port = process.env.PORT || 3000;
+
 
 //Routers
 // const phoneBookImport = require("./routers/get-phonebook-router");
@@ -237,3 +242,24 @@ app.listen(port, (error) => {
     }
     console.log(`listening on port ${port}`);
 });
+
+3.13
+require('dotenv').config();
+const Contact = require('./module/contact');
+const url = process.env.MONGODB_URI ;
+
+console.log(url);
+
+const password = process.argv[2]
+
+if(process.argv[4]){
+    const contact = new Contact({
+        name: process.argv[3],
+        number: process.argv[4]
+    })
+    contact.save().then(result => {
+        console.log(`${contact.name} was saved!`)
+        mongoose.connection.close()
+    })
+}
+
