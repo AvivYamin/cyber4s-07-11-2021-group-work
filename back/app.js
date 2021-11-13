@@ -10,9 +10,24 @@ app.use(cors({
     methods: '*'
 }));
 
-
+const mongoose = require('mongoose');
 const port = process.env.PORT || 3000;
 
+//3.13
+require('dotenv').config();
+const Contact = require('./module/contact');
+const url = process.env.MONGODB_URI ;
+
+if(process.argv[4]){
+    const contact = new Contact({
+        name: process.argv[3],
+        number: process.argv[4]
+    })
+    contact.save().then(result => {
+        console.log(`${contact.name} was saved!`)
+        mongoose.connection.close()
+    })
+}
 
 //3.7
 // app.use(morgan('tiny'));
@@ -54,7 +69,15 @@ let phoneBook = [
 //3.1
 app.get('/api/persons', (req, res) => {
     try {
-        res.send(phoneBook);
+        let contactsArray = [];
+        Contact.find({}).then(result => {
+            result.forEach(contact => {
+              console.log(`${contact.name} ${contact.number}`)
+              contactsArray.push(contact);
+            })
+            // mongoose.connection.close()
+            res.send(contactsArray);
+        })
     } catch (error) {
         console.log(error);
         res.send(error);
@@ -243,23 +266,5 @@ app.listen(port, (error) => {
     console.log(`listening on port ${port}`);
 });
 
-3.13
-require('dotenv').config();
-const Contact = require('./module/contact');
-const url = process.env.MONGODB_URI ;
 
-console.log(url);
-
-const password = process.argv[2]
-
-if(process.argv[4]){
-    const contact = new Contact({
-        name: process.argv[3],
-        number: process.argv[4]
-    })
-    contact.save().then(result => {
-        console.log(`${contact.name} was saved!`)
-        mongoose.connection.close()
-    })
-}
 

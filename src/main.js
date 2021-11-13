@@ -6,6 +6,8 @@ import * as formFuncs from './helpers/form/form-requests';
 import {getPhonebook} from './helpers/display-phonebook';
 import * as searchFuncs from './helpers/search/search-functions';
 
+console.log(`${GV.baseUrl}/api/persons`);
+
 //User login setup
 let userName = localStorage.getItem("username");
 loginFuncs.setUpLogin(userName);
