@@ -1,6 +1,6 @@
 //API variables
 // const baseUrl = "http://localhost:3000";
-const baseUrl = 'https://frozen-shelf-08348.herokuapp.com';
+const baseUrl = 'frozen-shelf-08348.herokuapp.com';
 //General variables
 const mainHead = document.getElementById("main-head");
 const displayPhonebookBtn = document.getElementById("my-phonebook-button");
