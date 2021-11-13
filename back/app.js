@@ -91,19 +91,6 @@ app.get('/api/persons/:id', (req, res) => {
 })
 
 //3.4
-function findAndDelentPersonbyId(phoneBook, id){
-    let i = null;
-    phoneBook.forEach(person => {
-        if(person.id == id){
-            i = id - 1;
-        }
-    });
-    if(i){
-        phoneBook.splice(i, 1);    
-    }
-    return phoneBook;
-};
-
 app.delete('/api/persons/:id', (req, res) => {
     try {
         const id = req.params.id;
@@ -135,7 +122,8 @@ function validateRequest(request){
         if(request.name === ""){
             return 3;
         }
-        if(findNameInPhonebook(request.name, phoneBook)){
+        console.log(findNameInPhonebook(request.name));
+        if(findNameInPhonebook(request.name)){
             return 4;
         }
     }
@@ -147,30 +135,34 @@ function validateRequest(request){
         if(!Number(number)){
             return 6;
         }
-        if(findNumberInPhonebook(request.number, phoneBook)){
+        if(findNumberInPhonebook(request.number)){
             return 7;
         } 
     }
 }
 
-function findNameInPhonebook(name, phoneBook){
+function findNameInPhonebook(name){
     let flag = false;
-    phoneBook.forEach(person => {
-        if(person.name === name){
+    Contact.find({}).then(result => { //Search the database for data
+    result.forEach(contact => { //For each contact recieved from database push it to the response array
+        if(contact.name === name){
             flag = true;
         }
     });
     return flag;
+    })
 };
 
-function findNumberInPhonebook(number, phoneBook){
+function findNumberInPhonebook(number){
     let flag = false;
-    phoneBook.forEach(person => {
-        if(person.number === number){
+    Contact.find({}).then(result => { //Search the database for data
+    result.forEach(contact => { //For each contact recieved from database push it to the response array
+        if(contact.number === number){
             flag = true;
         }
     });
     return flag;
+    })
 }
 
 app.post('/api/persons', (req, res) => {
@@ -203,16 +195,15 @@ app.post('/api/persons', (req, res) => {
                  validation = true;
                  break;
         }
-        console.log(validation);
+        
         if(validation === true){
-             let newPersonObject = {
-              id: Math.floor(Math.random() * 101),
-              name: req.body.name,
-              number: req.body.number
-            };
-            phoneBook.push(newPersonObject);
-            console.log(newPersonObject);
-            res.send(newPersonObject);
+             const newContact = new Contact({
+                name: req.body.name,
+                number: req.body.number
+             })
+             newContact.save().then(savedContact => {
+                res.send(savedContact);
+            })
         }else{
             res.send(validation);
         }
