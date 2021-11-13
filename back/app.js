@@ -106,13 +106,17 @@ function findAndDelentPersonbyId(phoneBook, id){
 
 app.delete('/api/persons/:id', (req, res) => {
     try {
-        let originLength = phoneBook.length;
         const id = req.params.id;
-        phoneBook = findAndDelentPersonbyId(phoneBook, id);
-        if(phoneBook.length != originLength){
-            res.send(`Item No.${id} was deleted. Phonebook length: ${phoneBook.length}`);
-        }
-        res.status(400).send("Invalid ID");
+        Contact.findByIdAndDelete(id, (err, docs)=> { //Search the database for data with that id
+            if(err){
+                console.log(err);
+                res.status(400).send("Invalid ID");
+            }else{
+                console.log(docs)
+                console.log(`${id} was deleted`);
+                res.send(`${id} was deleted`);
+            }
+        })
     } catch (error) {
         console.log(error);
         res.send(error);
