@@ -34,22 +34,19 @@ if(process.argv[4]){
 morgan.token('body', (req, res) => JSON.stringify(req.body));
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
 
-function getPhoneBookFromDB(){ //recieves the contacts phonebook from mongo DB
-    let contactsArray = [];
-    Contact.find({}).then(result => { //Search the database for data
-        result.forEach(contact => { //For each contact recieved from database push it to the response array
-            contactsArray.push(contact);
-        })
-        return contactsArray;
-    })
-}
-
 
 //3.1
 app.get('/api/persons', (req, res) => {
     try {
-        const phoneBook = getPhoneBookFromDB();
-        res.send(phoneBook);
+        // const phoneBook = getPhoneBookFromDB();
+        const contactsArray = [];
+        Contact.find({}).then(result => { //Search the database for data
+        result.forEach(contact => { //For each contact recieved from database push it to the response array
+            contactsArray.push(contact);
+        })
+        console.log(contactsArray);
+        res.send(contactsArray);
+    })
     }catch (error) {
         console.log(error);
         res.send(error);
@@ -60,9 +57,15 @@ app.get('/api/persons', (req, res) => {
 app.get('/info', (req, res) => {
     try {
         const requestDate = new Date(Date.now()).toString();
-        const phoneBook = getPhoneBookFromDB();
-        let response = `Phonebook has info for ${phoneBook.length} people \n ${requestDate}!!`;
-        res.send(response);
+        const contactsArray = [];
+        Contact.find({}).then(result => { //Search the database for data
+            result.forEach(contact => { //For each contact recieved from database push it to the response array
+                contactsArray.push(contact);
+            })
+            console.log(contactsArray);
+            let response = `Phonebook has info for ${contactsArray.length} people \n ${requestDate}!!`;
+            res.send(response);
+        })
     } catch (error) {
         console.log(error);
         res.send(error);
@@ -70,24 +73,17 @@ app.get('/info', (req, res) => {
 })
 
 //3.3
-function findPersonbyId(phoneBook, id){
-    let selectedPerson;
-    phoneBook.forEach(person => {
-        if(person.id == id){
-            selectedPerson = person;
-        }
-    });
-    return selectedPerson;
-}
-
 app.get('/api/persons/:id', (req, res) => {
     try {
         const id = req.params.id;
-        let person = findPersonbyId(phoneBook, id);
-        if(person){
-            res.send(person);
-        }
-        res.status(400).send("Invalid ID");
+        Contact.findById(id).then(result => { //Search the database for data with that id
+            console.log(result);
+            if(result){
+                res.send(result);
+            }else{
+                res.status(400).send("Invalid ID");
+            }
+        })
     } catch (error) {
         console.log(error);
         res.send(error);
