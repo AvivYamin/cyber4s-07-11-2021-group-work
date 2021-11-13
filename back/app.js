@@ -34,50 +34,23 @@ if(process.argv[4]){
 morgan.token('body', (req, res) => JSON.stringify(req.body));
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
 
+function getPhoneBookFromDB(){ //recieves the contacts phonebook from mongo DB
+    let contactsArray = [];
+    Contact.find({}).then(result => { //Search the database for data
+        result.forEach(contact => { //For each contact recieved from database push it to the response array
+            contactsArray.push(contact);
+        })
+        return contactsArray;
+    })
+}
 
-
-//Routers
-// const phoneBookImport = require("./routers/get-phonebook-router");
-// const getPhonbookInfoRouter = require("./routers/get-phonebook-info-router");
-
-// app.use("/api/persons",phoneBookImport.Router);
-// app.use("/info", getPhonbookInfoRouter);
-
-let phoneBook = [
-    { 
-      "id": 1,
-      "name": "Arto Hellas", 
-      "number": "040-123456"
-    },
-    { 
-      "id": 2,
-      "name": "Ada Lovelace", 
-      "number": "39-44-5323523"
-    },
-    { 
-      "id": 3,
-      "name": "Dan Abramov", 
-      "number": "12-43-234345"
-    },
-    { 
-      "id": 4,
-      "name": "Mary Poppendieck", 
-      "number": "39-23-6423122"
-    }
-];
 
 //3.1
 app.get('/api/persons', (req, res) => {
     try {
-        let contactsArray = [];
-        Contact.find({}).then(result => { //Search the database for data
-            result.forEach(contact => { //For each contact recieved from database push it to the response array
-              contactsArray.push(contact);
-            })
-            // mongoose.connection.close()
-            res.send(contactsArray);
-        })
-    } catch (error) {
+        const phoneBook = getPhoneBookFromDB();
+        res.send(phoneBook);
+    }catch (error) {
         console.log(error);
         res.send(error);
     }
@@ -87,8 +60,8 @@ app.get('/api/persons', (req, res) => {
 app.get('/info', (req, res) => {
     try {
         const requestDate = new Date(Date.now()).toString();
-        // res.send(phoneBook.length, requestDate);
-        let response = `Phonebook has info for ${phoneBook.length} people \n ${requestDate}`;
+        const phoneBook = getPhoneBookFromDB();
+        let response = `Phonebook has info for ${phoneBook.length} people \n ${requestDate}!!`;
         res.send(response);
     } catch (error) {
         console.log(error);
