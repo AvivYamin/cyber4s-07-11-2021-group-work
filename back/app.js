@@ -70,9 +70,8 @@ let phoneBook = [
 app.get('/api/persons', (req, res) => {
     try {
         let contactsArray = [];
-        Contact.find({}).then(result => {
-            result.forEach(contact => {
-              console.log(`${contact.name} ${contact.number}`)
+        Contact.find({}).then(result => { //Search the database for data
+            result.forEach(contact => { //For each contact recieved from database push it to the response array
               contactsArray.push(contact);
             })
             // mongoose.connection.close()

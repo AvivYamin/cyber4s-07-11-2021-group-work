@@ -5,8 +5,9 @@ import * as GV from './helpers/global-variables';
 import * as formFuncs from './helpers/form/form-requests';
 import {getPhonebook} from './helpers/display-phonebook';
 import * as searchFuncs from './helpers/search/search-functions';
+import {getInfo} from './helpers/display-info';
 
-console.log("hello!??!!");
+
 console.log(`${GV.baseUrl}/api/persons`);
 
 //User login setup
@@ -18,6 +19,8 @@ LV.logoutBtn.addEventListener("click", loginFuncs.logOut);
 
 //Display phone book
 GV.displayPhonebookBtn.addEventListener("click", getPhonebook);
+//Display Info
+GV.infoBtn.addEventListener("click", getInfo)
 //Form actions
 GV.submitBtn.addEventListener('click', formFuncs.postContact);
 //Search actions 
