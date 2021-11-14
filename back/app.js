@@ -91,17 +91,17 @@ app.get('/api/persons/:id', (req, res) => {
 })
 
 //3.4
-app.delete('/api/persons/:id', (req, res) => {
+app.delete('/api/persons/:query', (req, res) => {
     try {
-        const id = req.params.id;
-        Contact.findByIdAndDelete(id, (err, docs)=> { //Search the database for data with that id
+        const query = req.params.query;
+        Contact.findOneAndDelete({"name": query}, (err, docs)=> { //Search the database for data with that id
             if(err){
                 console.log(err);
-                res.status(400).send("Invalid ID");
+                res.status(400).send("Invalid Query");
             }else{
-                console.log(docs)
-                console.log(`${id} was deleted`);
-                res.send(`${id} was deleted`);
+                console.log(docs + "!@!@!@!@!@!@!@!")
+                console.log(`${query} was deleted`);
+                res.send(`${query} was deleted`);
             }
         })
     } catch (error) {

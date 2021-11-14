@@ -3,9 +3,9 @@ import * as LV from './helpers/login/login-variables';
 import * as loginFuncs from './helpers/login/login-functions';
 import * as GV from './helpers/global-variables';
 import * as formFuncs from './helpers/form/form-requests';
-import {getPhonebook} from './helpers/display-phonebook';
+import {getPhonebook} from './helpers/display/display-phonebook';
 import * as searchFuncs from './helpers/search/search-functions';
-import {getInfo} from './helpers/display-info';
+import {getInfo} from './helpers/display/display-info';
 
 
 console.log(`${GV.baseUrl}/api/persons`);

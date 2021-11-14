@@ -1,5 +1,5 @@
-import * as GV from './global-variables';
-import { createElement } from './general-functions';
+import * as GV from '../global-variables';
+import { createElement } from '../general-functions';
 
 export async function getInfo(){
     try {
