@@ -73,16 +73,16 @@ app.get('/info', (req, res) => {
 })
 
 //3.3
-app.get('/api/persons/:id', (req, res) => {
+app.get('/api/search/', (req, res) => {
     try {
-        const id = req.params.id;
-        Contact.findById(id).then(result => { //Search the database for data with that id
+        const query = req.query;
+        Contact.findOne(query).then(result => { //Search the database for data with that id
             console.log(result);
             if(result){
                 res.send(result);
-            }else{
-                res.status(400).send("Invalid ID");
-            }
+             }else{
+                 res.status(400).send("Invalid Query");
+             }
         })
     } catch (error) {
         console.log(error);

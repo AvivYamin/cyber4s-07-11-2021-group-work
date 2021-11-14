@@ -1,6 +1,6 @@
 import * as GV from '../global-variables';
 import { createElement } from '../general-functions';
-import { searchMycontact } from './filer';
+import { checkQueryType } from './check-query';
 
 function createResponseElement(contact){
     let message;
@@ -17,17 +17,18 @@ function createResponseElement(contact){
 export async function getContact(e){ 
     e.preventDefault();
     try {
-        const phonebookResponse = await axios.get(`${GV.baseUrl}/api/persons`);
-        const phoneBook = phonebookResponse.data;
         const query = GV.searchInput.value;
-        const result = searchMycontact(query, phoneBook);
-        if(result >= 0){
-            createResponseElement(phoneBook[result]);
+        if(!Number(query)){
+            const response = await axios.get(`${GV.baseUrl}/api/search/?name=${query}`);
+            console.log(response.data);
+            createResponseElement(response.data);
         }else{
-            result = "Contact Does not exist"
-            createResponseElement(result);
+            const response = await axios.get(`${GV.baseUrl}/api/search/?number=${query}`);
+            console.log(response.data);
+            createResponseElement(response.data);
         }
     } catch (error) {
         console.error(error);
+        createResponseElement("Invalid Query");
     }   
 };
